@@ -1,0 +1,4 @@
+node_modules/
+logs/
+qrshop.db
+.env

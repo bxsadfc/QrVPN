@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Shop</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1 data-i18n="title">Buy QR Code</h1>
+    <p data-i18n="description">Get your unique QR code for just $10!</p>
+    <p id="stock" data-i18n="stock">Available QR Codes: <span id="stock-count"></span></p>
+    <button id="buy-btn" data-i18n="buy">Buy Now</button>
+    <button id="cancel-btn" class="hidden" data-i18n="cancel">Cancel</button>
+    <div id="loading" class="hidden">Loading...</div>
+    <div id="qr-code" class="hidden"></div>
+    <button id="download-btn" class="hidden" data-i18n="download">Download QR Code</button>
+    <button id="refresh-btn" class="hidden" data-i18n="refresh">Refresh Status</button>
+    <div id="feedback-form" class="hidden">
+      <h3 data-i18n="feedback">Leave Feedback</h3>
+      <textarea id="feedback-text"></textarea>
+      <button id="submit-feedback" data-i18n="submit">Submit</button>
+    </div>
+    <div id="chat" class="hidden">
+      <h3 data-i18n="chat">Support Chat</h3>
+      <div id="chat-messages"></div>
+      <input id="chat-input" type="text" placeholder="Type a message..." />
+      <button id="chat-send" data-i18n="send">Send</button>
+    </div>
+    <button id="chat-toggle">💬</button>
+    <div id="faq">
+      <h3 data-i18n="faq">FAQ</h3>
+      <p data-i18n="faq_content">How to use QR code: Scan it with your phone.</p>
+    </div>
+    <button id="theme-toggle" data-i18n="toggle_theme">Toggle Dark Mode</button>
+  </div>
+  <audio id="success-sound" src="https://www.soundjay.com/buttons/beep-01a.mp3"></audio>
+  <script src="/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Panel</h1>
+    <div id="login-form">
+      <input id="username" type="text" placeholder="Username">
+      <input id="password" type="password" placeholder="Password">
+      <button id="login-btn">Login</button>
+    </div>
+    <div id="stats" class="hidden">
+      <h2>Statistics</h2>
+      <p>Total QR Codes: <span id="total-qr"></span></p>
+      <p>Sold QR Codes: <span id="sold-qr"></span></p>
+      <h3>Purchases</h3>
+      <ul id="purchases"></ul>
+      <h3>Feedback</h3>
+      <ul id="feedback"></ul>
+    </div>
+  </div>
+  <script>
+    let token = null;
+    document.getElementById('login-btn').addEventListener('click', async () => {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const response = await fetch('/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await response.json();
+      if (data.token) {
+        token = data.token;
+        document.getElementById('login-form').classList.add('hidden');
+        document.getElementById('stats').classList.remove('hidden');
+        loadStats();
+      }
+    });
+
+    async function loadStats() {
+      const response = await fetch('/admin/stats', {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      const data = await response.json();
+      document.getElementById('total-qr').textContent = data.totalQrCodes;
+      document.getElementById('sold-qr').textContent = data.soldQrCodes;
+      const purchases = document.getElementById('purchases');
+      data.purchases.forEach(p => {
+        purchases.innerHTML += `<li>${p.paymentId} - ${p.status} - ${p.qrCodeId.code}</li>`;
+      });
+
+      const feedbackResponse = await fetch('/admin/feedback', {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      const feedbackData = await feedbackResponse.json();
+      const feedbackList = document.getElementById('feedback');
+      feedbackData.forEach(f => {
+        feedbackList.innerHTML += `<li>${f.text} <button onclick="deleteFeedback('${f._id}')">Delete</button></li>`;
+      });
+    }
+
+    async function deleteFeedback(id) {
+      await fetch(`/admin/feedback/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      location.reload();
+    }
+  </script>
+</body>
+</html>
